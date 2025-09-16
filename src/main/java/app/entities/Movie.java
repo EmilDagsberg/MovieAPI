@@ -27,7 +27,7 @@ public class Movie {
 
 
     // Relations M:M
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "m_g_link",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
@@ -35,7 +35,7 @@ public class Movie {
     private Set<Genre> genres = new HashSet<>();
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "m_a_link",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
@@ -43,7 +43,7 @@ public class Movie {
     private Set<Actor> actors = new HashSet<>();
 
     // Relations M:1
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "director_id")
     private Director director;
 }
