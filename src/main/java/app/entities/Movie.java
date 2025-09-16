@@ -25,6 +25,8 @@ public class Movie {
 
     private String originalLanguage;
 
+    private double voteAverage;
+
 
     // Relations M:M
     @ManyToMany(cascade = CascadeType.PERSIST)
