@@ -14,6 +14,7 @@ public class ActorConverter {
         dtos.forEach(dto -> actorEntities.add(
                 Actor.builder()
                         .id(dto.getId())
+                        .name(dto.getActorName())
                         .build()
         ));
         return actorEntities;
