@@ -1,14 +1,13 @@
 package app.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,4 +24,26 @@ public class Movie {
     private LocalDate releaseDate;
 
     private String originalLanguage;
+
+
+    // Relations M:M
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "m_g_link",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres = new HashSet<>();
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "m_a_link",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private Set<Actor> actors = new HashSet<>();
+
+    // Relations M:1
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "director_id")
+    private Director director;
 }
