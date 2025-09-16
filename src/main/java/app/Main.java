@@ -12,14 +12,12 @@ public class Main {
         String apiKey = System.getenv("API_KEY");
 
         MovieServices movieServices = new MovieServices();
-
-        MovieDTO movieDTO = movieServices.getMovieById("tt23289160", apiKey);
-
+        //MovieDTO movieDTO = movieServices.getMovieById("tt23289160", apiKey);
         //System.out.println(movieDTO);
-
         //movieServices.getByRating(8.5, 9.0, 2, apiKey).forEach(System.out::println);
-
-        movieServices.getSortedByReleaseDate(2, apiKey).forEach(System.out::println);
+        //movieServices.getSortedByReleaseDate(2, apiKey).forEach(System.out::println);
+        List<MovieDTO> allDanishMovies = movieServices.fetchDanishMovies(apiKey);
+        System.out.println(allDanishMovies.size());
 
     }
 }
