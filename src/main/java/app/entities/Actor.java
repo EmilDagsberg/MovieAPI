@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -17,4 +20,7 @@ public class Actor {
     private int id;
 
     private String name;
+
+    @ManyToMany(mappedBy = "actors")
+    private Set<Movie> movies = new HashSet<>();
 }

@@ -19,7 +19,7 @@ public class Main {
 
         //movieServices.getByRating(8.5, 9.0, 2, apiKey).forEach(System.out::println);
 
-        movieServices.getSortedByReleaseDate(2, apiKey).forEach(System.out::println);
+        // movieServices.getSortedByReleaseDate(2, apiKey).forEach(System.out::println);
 
     }
 }
