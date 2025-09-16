@@ -12,5 +12,7 @@ public class MoviesResponseDTO {
     @JsonAlias({"movie_results", "results"})
     private List<MovieDTO> results;
     private int page;
+    @JsonProperty("total_pages")
+    private int totalPages;
 
 }

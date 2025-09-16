@@ -9,9 +9,61 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieServices {
+    public List<MovieDTO> fetchDanishMovies(String apiKey) {
+        List<MovieDTO> movieDTO = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        // Fetch data from api
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        int currentPage = 1;
+        int totalPage = 1;
+
+        // Create a request
+        try {
+            do {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=" + currentPage + "&primary_release_date.gte=2020-01-01&primary_release_date.lte=2025-12-31&sort_by=popularity.desc&with_original_language=da"))
+                        .header("Authorization", "Bearer " + apiKey)
+                        .GET()
+                        .build();
+
+                // Send the request and get the response
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    String json = response.body();
+                    MoviesResponseDTO discoverResponse = objectMapper.readValue(json, MoviesResponseDTO.class);
+
+                    if (discoverResponse.getResults() != null && !discoverResponse.getResults().isEmpty()) {
+                        movieDTO.addAll(discoverResponse.getResults());
+                    }
+                    totalPage = discoverResponse.getTotalPages();
+                    currentPage++;
+
+
+                } else {
+                    System.out.println("Fejl ved læsning af Movie-API");
+                    System.out.println("Fejl: " + response.body());
+                    break;
+                }
+            } while (currentPage <= totalPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return movieDTO;
+
+    }
+
+
+
     public MovieDTO getMovieById(String movieId, String apiKey) {
         MovieDTO movieDTO = null;
         ObjectMapper objectMapper = new ObjectMapper();
