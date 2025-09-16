@@ -14,4 +14,7 @@ public class GenreDTO {
     @JsonProperty("name")
     private String genreName;
 
+    @JsonProperty("id")
+    private int id;
+
 }
