@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true) // ignorer json properties der ikke er i denne dto
 public class MovieDTO {
+    private int id;
     private String title;
     @JsonProperty("original_title")
     private String originalTitle;

@@ -1,9 +1,7 @@
 package app.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,6 +11,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "movie")
 public class Movie {
 
@@ -48,4 +48,5 @@ public class Movie {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "director_id")
     private Director director;
+
 }
