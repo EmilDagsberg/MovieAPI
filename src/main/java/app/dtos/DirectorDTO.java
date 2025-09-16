@@ -13,4 +13,7 @@ import lombok.NoArgsConstructor;
 public class DirectorDTO {
     @JsonProperty("name")
     private String directorName;
+
+    @JsonProperty("id")
+    private int id;
 }
