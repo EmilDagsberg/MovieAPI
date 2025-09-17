@@ -22,4 +22,8 @@ public class Actor {
 
     @ManyToMany(mappedBy = "actors")
     private Set<Movie> movies = new HashSet<>();
+
+    public void addMovie(Movie movie) {
+        this.movies.add(movie);
+    }
 }

@@ -35,12 +35,18 @@ public class Main {
         System.out.println(allDanishMovies.size());
 
         List<Movie> movies = movieConverter.convertToEntity(allDanishMovies);
+
+
+        //List<Integer> movieIds = movieDAO.getMovieIds();
+
+
+        List<Actor> allActors = actorServices.fetchAllActors(apiKey, movies);
+        actorDAO.createActor(allActors);
         movieDAO.createMovies(movies);
 
-        List<Integer> movieIds = movieDAO.getMovieIds();
-        List<ActorDTO> allActors = actorServices.fetchAllActors(apiKey, movieIds);
-        List<Actor> actors = actorConverter.convertToEntity(allActors);
-        actorDAO.createActor(actors);
+
+
+        movieDAO.updateMovies(movies);
 
  
 

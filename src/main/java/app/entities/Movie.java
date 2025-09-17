@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,7 +38,7 @@ public class Movie {
     private Set<Genre> genres = new HashSet<>();
 
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "m_a_link",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
@@ -49,4 +50,9 @@ public class Movie {
     @JoinColumn(name = "director_id")
     private Director director;
 
+
+    public void addActor(Actor actor) {
+        this.actors.add(actor);
+
+    }
 }

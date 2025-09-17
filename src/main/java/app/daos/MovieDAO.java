@@ -25,6 +25,16 @@ public class MovieDAO {
         }
     }
 
+    public void updateMovies(List<Movie> danishMovies) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            danishMovies.forEach(movie -> em.merge(movie));
+            em.getTransaction().commit();
+            em.close();
+        }
+    }
+
+
     public List<Integer> getMovieIds() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Integer> query = em.createQuery("SELECT m.id FROM Movie m", Integer.class);
