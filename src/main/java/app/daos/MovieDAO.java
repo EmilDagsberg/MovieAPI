@@ -3,7 +3,9 @@ package app.daos;
 import app.entities.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 
@@ -30,6 +32,22 @@ public class MovieDAO {
 
         }
     }
+
+    public List<Movie> getMoviesByDirector(String directorName) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Query q = em.createQuery("SELECT m FROM Movie m WHERE m.director.name = :directorName", Movie.class);
+            q.setParameter("directorName", directorName);
+            return q.getResultList();
+        }
+    }
+
+    public Movie getMovieById(int movieId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.find(Movie.class, movieId);
+        }
+    }
+
 
 
 }
