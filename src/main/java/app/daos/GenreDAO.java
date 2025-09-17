@@ -15,10 +15,10 @@ public class GenreDAO {
         this.emf = emf;
     }
 
-    public void createGenre(Genre genre) {
+    public void createGenre(List<Genre> genre) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.persist(genre);
+            genre.forEach(genre1 -> em.merge(genre1));
             em.getTransaction().commit();
             em.close();
         }

@@ -4,12 +4,15 @@ import app.config.HibernateConfig;
 import app.converters.ActorConverter;
 import app.converters.MovieConverter;
 import app.daos.ActorDAO;
+import app.daos.GenreDAO;
 import app.daos.MovieDAO;
 import app.dtos.ActorDTO;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
+import app.entities.Genre;
 import app.entities.Movie;
 import app.services.ActorServices;
+import app.services.GenreServices;
 import app.services.MovieServices;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -27,17 +30,16 @@ public class Main {
         MovieDAO movieDAO = new MovieDAO(emf);
 
         ActorServices actorServices = new ActorServices();
-        ActorConverter actorConverter = new ActorConverter();
         ActorDAO actorDAO = new ActorDAO(emf);
+
+        GenreServices genreServices = new GenreServices();
+        GenreDAO genreDAO = new GenreDAO(emf);
 
         
         List<MovieDTO> allDanishMovies = movieServices.fetchDanishMovies(apiKey);
-        System.out.println(allDanishMovies.size());
 
         List<Movie> movies = movieConverter.convertToEntity(allDanishMovies);
 
-
-        //List<Integer> movieIds = movieDAO.getMovieIds();
 
 
         List<Actor> allActors = actorServices.fetchAllActors(apiKey, movies);
@@ -48,7 +50,18 @@ public class Main {
             movie.addActor(apiKey);
         });
 
+
+
+        List<Genre> allGenres = genreServices.fetchAllGenres(apiKey, movies);
+        genreDAO.createGenre(allGenres);
+
+        movies.forEach(movie -> {
+            movie.addGenre(apiKey);
+        });
+
+
         movieDAO.updateMovies(movies);
+
 
  
 
