@@ -49,4 +49,17 @@ public class Movie {
     @JoinColumn(name = "director_id")
     private Director director;
 
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", originalLanguage='" + originalLanguage + '\'' +
+                ", voteAverage=" + voteAverage +
+                ", director=" + (director != null ? director.getName() : "null") +
+                '}';
+    }
+
 }
