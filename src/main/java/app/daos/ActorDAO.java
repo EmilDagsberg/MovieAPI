@@ -17,7 +17,7 @@ public class ActorDAO {
     public void createActor(List<Actor> actors) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            actors.forEach(actor -> em.persist(actor));
+            actors.forEach(actor -> em.merge(actor));
             em.getTransaction().commit();
             em.close();
         }

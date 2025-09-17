@@ -1,10 +1,12 @@
 package app.entities;
 
+import app.services.ActorServices;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,6 +39,7 @@ public class Movie {
     private Set<Genre> genres = new HashSet<>();
 
 
+    @Builder.Default
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "m_a_link",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -49,6 +52,12 @@ public class Movie {
     @JoinColumn(name = "director_id")
     private Director director;
 
+
+    public void addActor(String apiKey) {
+        ActorServices actorServices = new ActorServices();
+        List<Actor> foundActors = actorServices.fetchActorsById(this.getId(), apiKey);
+        foundActors.forEach(actor -> actors.add(actor));
+    }
 
     @Override
     public String toString() {

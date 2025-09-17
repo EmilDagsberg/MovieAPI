@@ -1,9 +1,12 @@
 package app.services;
 
+import app.converters.ActorConverter;
 import app.daos.MovieDAO;
 import app.dtos.ActorDTO;
 import app.dtos.ActorResponseDTO;
 import app.dtos.MoviesResponseDTO;
+import app.entities.Actor;
+import app.entities.Movie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -17,8 +20,9 @@ import java.util.List;
 import java.util.Set;
 
 public class ActorServices {
-    public List<ActorDTO> fetchAllActors(String apiKey, List<Integer> movieId) {
-        Set<ActorDTO> actorDTOs = new HashSet<>();
+    public List<Actor> fetchAllActors(String apiKey, List<Movie> danishMovies) {
+        Set<Actor> actors = new HashSet<>();
+        ActorConverter actorConverter = new ActorConverter();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
@@ -33,7 +37,7 @@ public class ActorServices {
         try {
             do {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(new URI("https://api.themoviedb.org/3/movie/" + movieId.get(loop) + "/credits?language=en-US"))
+                        .uri(new URI("https://api.themoviedb.org/3/movie/" + danishMovies.get(loop).getId() + "/credits?language=en-US"))
                         .header("Authorization", "Bearer " + apiKey)
                         .GET()
                         .build();
@@ -46,7 +50,10 @@ public class ActorServices {
                     ActorResponseDTO discoverResponse = objectMapper.readValue(json, ActorResponseDTO.class);
 
                     if (discoverResponse.getResults() != null && !discoverResponse.getResults().isEmpty()) {
-                        actorDTOs.addAll(discoverResponse.getResults());
+                        List<Actor> foundActors = actorConverter.convertToEntity(discoverResponse.getResults());
+                        actors.addAll(foundActors);
+
+
                     }
                     loop++;
 
@@ -57,11 +64,57 @@ public class ActorServices {
                     System.out.println("Fejl: " + response.body());
                     break;
                 }
-            } while (loop < movieId.size());
+            } while (loop < danishMovies.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new ArrayList<>(actorDTOs);
+        return new ArrayList<>(actors);
     }
+
+    public List<Actor> fetchActorsById(int movieId, String apiKey) {
+        List<Actor> actors = new ArrayList<>();
+        ActorConverter actorConverter = new ActorConverter();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        // Fetch data from api
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // Create a request
+        try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("https://api.themoviedb.org/3/movie/" + movieId + "/credits?language=en-US"))
+                        .header("Authorization", "Bearer " + apiKey)
+                        .GET()
+                        .build();
+
+                // Send the request and get the response
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    String json = response.body();
+                    ActorResponseDTO discoverResponse = objectMapper.readValue(json, ActorResponseDTO.class);
+
+                    if (discoverResponse.getResults() != null && !discoverResponse.getResults().isEmpty()) {
+                        List<Actor> foundActors = actorConverter.convertToEntity(discoverResponse.getResults());
+                        actors.addAll(foundActors);
+
+                    }
+
+
+
+
+                } else {
+                    System.out.println("Fejl ved læsning af Movie-API");
+                    System.out.println("Fejl: " + response.body());
+
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>(actors);
+    }
+
 }
