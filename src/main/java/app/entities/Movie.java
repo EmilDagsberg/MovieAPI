@@ -1,6 +1,7 @@
 package app.entities;
 
 import app.services.ActorServices;
+import app.services.GenreServices;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class Movie {
 
 
     // Relations M:M
+    @Builder.Default
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "m_g_link",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -57,6 +59,12 @@ public class Movie {
         ActorServices actorServices = new ActorServices();
         List<Actor> foundActors = actorServices.fetchActorsById(this.getId(), apiKey);
         foundActors.forEach(actor -> actors.add(actor));
+    }
+
+    public void addGenre(String apiKey) {
+        GenreServices genreServices = new GenreServices();
+        List<Genre> foundGenres = genreServices.fetchGenreById(this.getId(), apiKey);
+        foundGenres.forEach(genre -> genres.add(genre));
     }
 
     @Override
