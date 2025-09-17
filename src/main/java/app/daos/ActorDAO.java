@@ -1,6 +1,7 @@
 package app.daos;
 
 import app.entities.Actor;
+import app.entities.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -19,6 +20,13 @@ public class ActorDAO {
             actors.forEach(actor -> em.persist(actor));
             em.getTransaction().commit();
             em.close();
+        }
+    }
+
+    public List<Actor> getAll(){
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT a FROM Actor a", Actor.class)
+                    .getResultList();
         }
     }
 }

@@ -30,7 +30,6 @@ public class Main {
         ActorConverter actorConverter = new ActorConverter();
         ActorDAO actorDAO = new ActorDAO(emf);
 
-        
         List<MovieDTO> allDanishMovies = movieServices.fetchDanishMovies(apiKey);
         System.out.println(allDanishMovies.size());
 
@@ -41,8 +40,5 @@ public class Main {
         List<ActorDTO> allActors = actorServices.fetchAllActors(apiKey, movieIds);
         List<Actor> actors = actorConverter.convertToEntity(allActors);
         actorDAO.createActor(actors);
-
- 
-
     }
 }

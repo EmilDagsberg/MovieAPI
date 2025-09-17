@@ -43,9 +43,16 @@ public class MovieDAO {
         }
     }
 
-    public Movie getMovieById(int movieId) {
+    public Movie getMovieById(Integer movieId) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.find(Movie.class, movieId);
+        }
+    }
+
+    public List<Movie> getAll(){
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT m FROM Movie m", Movie.class)
+                    .getResultList();
         }
     }
 
