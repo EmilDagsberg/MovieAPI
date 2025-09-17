@@ -44,7 +44,9 @@ public class Main {
         actorDAO.createActor(allActors);
         movieDAO.createMovies(movies);
 
-
+        movies.forEach(movie -> {
+            movie.addActor(apiKey);
+        });
 
         movieDAO.updateMovies(movies);
 

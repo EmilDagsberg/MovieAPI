@@ -72,4 +72,49 @@ public class ActorServices {
         return new ArrayList<>(actors);
     }
 
+    public List<Actor> fetchActorsById(int movieId, String apiKey) {
+        List<Actor> actors = new ArrayList<>();
+        ActorConverter actorConverter = new ActorConverter();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        // Fetch data from api
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        // Create a request
+        try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("https://api.themoviedb.org/3/movie/" + movieId + "/credits?language=en-US"))
+                        .header("Authorization", "Bearer " + apiKey)
+                        .GET()
+                        .build();
+
+                // Send the request and get the response
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    String json = response.body();
+                    ActorResponseDTO discoverResponse = objectMapper.readValue(json, ActorResponseDTO.class);
+
+                    if (discoverResponse.getResults() != null && !discoverResponse.getResults().isEmpty()) {
+                        List<Actor> foundActors = actorConverter.convertToEntity(discoverResponse.getResults());
+                        actors.addAll(foundActors);
+
+                    }
+
+
+
+
+                } else {
+                    System.out.println("Fejl ved læsning af Movie-API");
+                    System.out.println("Fejl: " + response.body());
+
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>(actors);
+    }
+
 }
