@@ -33,6 +33,7 @@ public class MovieDAO {
         }
     }
 
+    // Returns a list of movies made by a given director name
     public List<Movie> getMoviesByDirector(String directorName) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -48,6 +49,58 @@ public class MovieDAO {
         }
     }
 
+    // Returns a list of movies with a given genre
+    public List<Movie> getMoviesByGenre(String genre) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            TypedQuery<Movie> query = em.createQuery(
+                    "SELECT m FROM Movie m JOIN m.genres g WHERE g.genreName = :genreName", Movie.class);
+            query.setParameter("genreName", genre);
+            return query.getResultList();
+        }
+    }
+
+    // Returns a list of movies with given search-word (Case-insensitive)
+    public List<Movie> getMoviesByTitle(String title) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            TypedQuery<Movie> query = em.createQuery(
+                    "SELECT m FROM Movie m WHERE LOWER(m.title) LIKE :title", Movie.class);
+            query.setParameter("title", "%" + title.toLowerCase() + "%");
+            return query.getResultList();
+        }
+    }
+
+    public double getTotalAverageRating() {
+        try (EntityManager em = emf.createEntityManager()) {
+            Double avg = em.createQuery(
+                    "SELECT AVG(m.voteAverage) FROM Movie m", Double.class
+            ).getSingleResult();
+            return avg;
+        }
+    }
+
+    // Sorts list by descending and takes top 10 from list
+    public List<Movie> getTop10Movies() {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Movie> query = em.createQuery(
+                    "SELECT m FROM Movie m ORDER BY m.voteAverage DESC", Movie.class
+            );
+            query.setMaxResults(10); // Make list only be 10 long
+            return query.getResultList();
+        }
+    }
+
+    // Sorts list by ascending and takes top 10 from list
+    public List<Movie> getBot10Movies() {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Movie> query = em.createQuery(
+                    "SELECT m FROM Movie m ORDER BY m.voteAverage ASC", Movie.class
+            );
+            query.setMaxResults(10);
+            return query.getResultList();
+        }
+    }
 
 
 }
