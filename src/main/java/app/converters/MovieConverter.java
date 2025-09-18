@@ -13,7 +13,7 @@ public class MovieConverter {
         dtos.forEach(dto -> movieEntities.add(
                 Movie.builder()
                         .id(dto.getId())
-                        .title(dto.getTitle())
+                        .title(dto.getOriginalTitle())
                         .releaseDate(LocalDate.parse(dto.getReleaseDate()))
                         .originalLanguage(dto.getOriginalLanguage())
                         .voteAverage(dto.getVoteAverage())
