@@ -14,10 +14,10 @@ public class DirectorDAO {
         this.emf = emf;
     }
 
-    public void createDirector(Director director) {
+    public void createDirector(List<Director> directors) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.persist(director);
+            directors.forEach(director -> em.merge(director));
             em.getTransaction().commit();
             em.close();
         }

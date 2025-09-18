@@ -16,4 +16,7 @@ public class DirectorDTO {
 
     @JsonProperty("id")
     private int id;
+
+    @JsonProperty("job")
+    private String job;
 }

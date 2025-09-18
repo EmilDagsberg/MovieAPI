@@ -1,6 +1,7 @@
 package app.entities;
 
 import app.services.ActorServices;
+import app.services.DirectorServices;
 import app.services.GenreServices;
 import jakarta.persistence.*;
 import lombok.*;
@@ -65,6 +66,12 @@ public class Movie {
         GenreServices genreServices = new GenreServices();
         List<Genre> foundGenres = genreServices.fetchGenreById(this.getId(), apiKey);
         foundGenres.forEach(genre -> genres.add(genre));
+    }
+
+    public void addDirector(String apiKey) {
+        DirectorServices directorServices = new DirectorServices();
+        Director foundDirector = directorServices.fetchDirectorById(this.getId(), apiKey);
+        this.director = foundDirector;
     }
 
     @Override

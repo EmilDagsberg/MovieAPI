@@ -35,7 +35,7 @@ public class Main {
         GenreServices genreServices = new GenreServices();
         GenreDAO genreDAO = new GenreDAO(emf);
 
-
+        
         List<MovieDTO> allDanishMovies = movieServices.fetchDanishMovies(apiKey);
 
         List<Movie> movies = movieConverter.convertToEntity(allDanishMovies);
@@ -63,6 +63,7 @@ public class Main {
         movieDAO.updateMovies(movies);
 
 
+ 
 
     }
 }

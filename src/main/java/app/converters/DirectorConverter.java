@@ -5,7 +5,7 @@ import app.entities.Director;
 
 public class DirectorConverter {
 
-    public Director director(DirectorDTO directorDTO) {
+    public Director convertToEntity(DirectorDTO directorDTO) {
         return Director.builder()
                 .id(directorDTO.getId())
                 .name(directorDTO.getDirectorName())
