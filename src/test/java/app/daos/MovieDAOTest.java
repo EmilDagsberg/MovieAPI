@@ -55,4 +55,34 @@ class MovieDAOTest {
         m1 = movieDAO.getMovieById(663870);
         assertEquals("Riders of Justice", m1.getTitle());
     }
+
+    @Test
+    void getMoviesByGenre() {
+    }
+
+    @Test
+    void getMoviesByTitle() {
+        movieDAO.createMovies(movieList);
+        List<Movie> movies = movieDAO.getMoviesByTitle();
+    }
+
+    @Test
+    void getTotalAverageRating() {
+    }
+
+    @Test
+    void getTop10Movies() {
+        movieDAO.createMovies(movieList);
+        List<Movie> topTen = movieDAO.getTop10Movies();
+
+        assertEquals(10, topTen.size());
+    }
+
+    @Test
+    void getBot10Movies() {
+        movieDAO.createMovies(movieList);
+        List<Movie> topTen = movieDAO.getBot10Movies();
+
+        assertEquals(10, topTen.size());
+    }
 }

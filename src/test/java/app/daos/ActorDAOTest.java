@@ -31,9 +31,8 @@ class ActorDAOTest {
             em.getTransaction().commit();
             movieList = MoviePopulator.populateMovies(movieDAO);
             movieDAO.createMovies(movieList);
-            movieIds = movieDAO.getMovieIds();
 
-            actorList = ActorPopulator.populateActors(movieIds);
+            actorList = ActorPopulator.populateActors(movieList);
             actorDAO.createActor(actorList);
         } catch (Exception e) {
             throw new RuntimeException(e);
