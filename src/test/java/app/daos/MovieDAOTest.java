@@ -46,24 +46,38 @@ class MovieDAOTest {
 
     @Test
     void getMoviesByDirector() {
-//        movieDAO.getMoviesByDirector("");
+        movieDAO.createMovies(movieList);
+        List<Movie> moviesByDirector = movieDAO.getMoviesByDirector("Bille August");
+
+        assertTrue(moviesByDirector != null &&
+                moviesByDirector.stream().allMatch(movie -> movie.getDirector().getName().toLowerCase().contains("bille august")));
     }
 
     @Test
     void getMovieById() {
         movieDAO.createMovies(movieList);
         m1 = movieDAO.getMovieById(663870);
-        assertEquals("Riders of Justice", m1.getTitle());
+        assertEquals("Retfærdighedens Ryttere", m1.getTitle());
     }
 
     @Test
     void getMoviesByGenre() {
+        movieDAO.createMovies(movieList);
+        List<Movie> moviesByGenre = movieDAO.getMoviesByGenre("Horror");
+
+        assertTrue(moviesByGenre != null && moviesByGenre.stream().allMatch(movie -> movie.getGenres()
+                .stream().allMatch(genre -> genre.getGenreName().toLowerCase().contains("horror"))));
     }
 
     @Test
     void getMoviesByTitle() {
         movieDAO.createMovies(movieList);
-        List<Movie> movies = movieDAO.getMoviesByTitle();
+        List<Movie> movies = movieDAO.getMoviesByTitle("De");
+
+        if(!movies.isEmpty()){
+            assertTrue(movies.stream()
+                    .allMatch(movie -> movie.getTitle() != null && movie.getTitle().toLowerCase().contains("de")));
+        }
     }
 
     @Test

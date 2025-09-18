@@ -62,8 +62,5 @@ public class Main {
 
         movieDAO.updateMovies(movies);
 
-
- 
-
     }
 }
