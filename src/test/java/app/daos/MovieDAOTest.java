@@ -25,6 +25,7 @@ class MovieDAOTest {
             em.createQuery("DELETE FROM Movie").executeUpdate();
             em.getTransaction().commit();
             movieList = MoviePopulator.populateMovies(movieDAO);
+            movieDAO.createMovies(movieList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -32,7 +33,6 @@ class MovieDAOTest {
 
     @Test
     void createMovies() {
-        movieDAO.createMovies(movieList);
 
         List<Movie> movies = movieDAO.getAll();
         assertTrue(movies.size() > 1000);
@@ -46,7 +46,6 @@ class MovieDAOTest {
 
     @Test
     void getMoviesByDirector() {
-        movieDAO.createMovies(movieList);
         List<Movie> moviesByDirector = movieDAO.getMoviesByDirector("Bille August");
 
         assertTrue(moviesByDirector != null &&
@@ -55,14 +54,12 @@ class MovieDAOTest {
 
     @Test
     void getMovieById() {
-        movieDAO.createMovies(movieList);
         m1 = movieDAO.getMovieById(663870);
-        assertEquals("Retfærdighedens Ryttere", m1.getTitle());
+        assertEquals("Retfærdighedens ryttere", m1.getTitle());
     }
 
     @Test
     void getMoviesByGenre() {
-        movieDAO.createMovies(movieList);
         List<Movie> moviesByGenre = movieDAO.getMoviesByGenre("Horror");
 
         assertTrue(moviesByGenre != null && moviesByGenre.stream().allMatch(movie -> movie.getGenres()
@@ -71,22 +68,24 @@ class MovieDAOTest {
 
     @Test
     void getMoviesByTitle() {
-        movieDAO.createMovies(movieList);
         List<Movie> movies = movieDAO.getMoviesByTitle("De");
 
-        if(!movies.isEmpty()){
-            assertTrue(movies.stream()
-                    .allMatch(movie -> movie.getTitle() != null && movie.getTitle().toLowerCase().contains("de")));
-        }
+        assertTrue(!movies.isEmpty());
+        assertTrue(movies.stream()
+                .allMatch(movie -> movie.getTitle() != null && movie.getTitle().toLowerCase().contains("de")));
+
     }
 
     @Test
     void getTotalAverageRating() {
+
+        double result = movieDAO.getTotalAverageRating();
+        assertNotNull(result);
+        assertTrue(result > 0);
     }
 
     @Test
     void getTop10Movies() {
-        movieDAO.createMovies(movieList);
         List<Movie> topTen = movieDAO.getTop10Movies();
 
         assertEquals(10, topTen.size());
@@ -94,7 +93,6 @@ class MovieDAOTest {
 
     @Test
     void getBot10Movies() {
-        movieDAO.createMovies(movieList);
         List<Movie> topTen = movieDAO.getBot10Movies();
 
         assertEquals(10, topTen.size());
