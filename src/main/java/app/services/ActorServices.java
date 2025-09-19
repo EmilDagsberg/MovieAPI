@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Set;
 
 public class ActorServices {
+
+    // Fetching every actor, by looping through all fetched movies. After getting a response, we use a converter, so the dto is converted to an Entity.
+    // We are then adding them to a Set, which is an easy solution to not have duplicates.
     public List<Actor> fetchAllActors(String apiKey, List<Movie> danishMovies) {
         Set<Actor> actors = new HashSet<>();
         ActorConverter actorConverter = new ActorConverter();

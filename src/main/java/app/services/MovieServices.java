@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieServices {
+
+    // This method first fetches all Danish movies. By getting the number of total pages from the response, we can loop through every page, so we can get every result.
     public List<MovieDTO> fetchDanishMovies(String apiKey) {
         List<MovieDTO> movieDTO = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
